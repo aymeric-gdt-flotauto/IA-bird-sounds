@@ -1,7 +1,7 @@
 import tensorflow as tf
-from tensorflow.keras import layers, models
+from tensorflow.keras import layers, models # type: ignore
 
-def build_models(num_classes, inputs, learning_rate=1e-4, dropout_rate=0.3):
+def build_models(num_classes, inputs, learning_rate=0.0001, dropout_rate=0.3):
     
     x = layers.Conv2D(32, (3,3), activation='relu', padding='same')(inputs)
     x = layers.BatchNormalization()(x)
