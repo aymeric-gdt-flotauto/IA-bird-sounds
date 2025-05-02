@@ -7,7 +7,7 @@ import shutil
 
 # config var to models archi
 epochs=30
-target_size=640
+target_size=(969,370)
 batch_size=32
 base_dir=r'C:\Users\FabienETHEVE\OneDrive - ARTIMON\Bureau\bird\IA-bird-sounds\dataset\bird_audio'
 train_dir=r'C:\Users\FabienETHEVE\OneDrive - ARTIMON\Bureau\bird\IA-bird-sounds\dataset\train_data'
@@ -34,19 +34,13 @@ os.makedirs(train_dir, exist_ok=True)
 train_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
     rescale=1./255,
     validation_split=0.2,
-    horizontal_flip=True
 )
 
 
-# Validation data should only be rescaled, not augmented
-val_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-    rescale=1./255,
-    validation_split=0.2
-)
 
 train_gen = train_datagen.flow_from_directory(
     train_dir,
-    target_size=(target_size, target_size),
+    target_size=target_size,
     batch_size=batch_size,
     class_mode='categorical',
     subset='training',
@@ -54,9 +48,9 @@ train_gen = train_datagen.flow_from_directory(
 )
 
 # Validation data generator without augmentation
-val_gen = val_datagen.flow_from_directory(
+val_gen = train_datagen.flow_from_directory(
     train_dir,
-    target_size=(target_size, target_size),
+    target_size=target_size,
     batch_size=batch_size,
     class_mode='categorical',
     subset='validation',  
@@ -78,7 +72,7 @@ early_stopping = tf.keras.callbacks.EarlyStopping(
     patience=5,
     restore_best_weights=True
 )
-inputs = tf.keras.layers.Input(shape=(640, 640, 3))
+inputs = tf.keras.layers.Input(shape=(969, 370, 3))
 model = build_models(num_classes,inputs)
 model.summary()
 history = model.fit(
