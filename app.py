@@ -1,6 +1,7 @@
 from models.config import models
 import tensorflow as tf
 
+epochs=30
 
 
 
@@ -12,10 +13,11 @@ early_stopping = tf.keras.callbacks.EarlyStopping(
     patience=5,
     restore_best_weights=True
 )
-inputs = tf.layers.Input(shape=(96, 96, 3))
+inputs = tf.layers.Input(shape=(640, 640, 3))
 model = models(inputs)
 
 history = model.fit(
-    
+    epochs=epochs,
+    callbacks=[early_stopping]
 )
 
