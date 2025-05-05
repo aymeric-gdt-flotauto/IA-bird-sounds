@@ -1,11 +1,13 @@
 import os
+import sys
+import shutil
+from pathlib import Path
+import numpy as np
+import matplotlib
+matplotlib.use('Agg')  # Utiliser le backend non-interactif Agg
+import matplotlib.pyplot as plt
 import librosa
 import librosa.display
-import matplotlib.pyplot as plt
-import numpy as np
-from pathlib import Path
-import shutil
-import sys
 from PIL import Image
 import noisereduce as nr
 import soundfile as sf
