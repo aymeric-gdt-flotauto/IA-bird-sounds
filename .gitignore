@@ -1,2 +1,12 @@
 dataset
 dataset2
+uploads
+static/converted
+*.pyc
+*.pyo
+*.pyd
+react-interface/node_modules
+*/uploads
+*/*/converted
+*/__pycache__
+__pycache__
