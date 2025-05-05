@@ -5,8 +5,6 @@ def conv_block(x, filters, kernel_size=(3,3), strides=(1,1)):
     shortcut = x
     x = layers.Conv2D(filters, kernel_size, strides=strides, padding='same', activation='relu')(x)
     x = layers.BatchNormalization()(x)
-    x = layers.Conv2D(filters, kernel_size, strides=strides, padding='same')(x)
-    x = layers.BatchNormalization()(x)
 
     # Adapter le shortcut si le nombre de canaux change
     if shortcut.shape[-1] != filters:
@@ -27,13 +25,13 @@ def build_models(num_classes, inputs):
     )
 
     x = conv_block(inputs, 32)
+    x = conv_block(x, 32)
     x = conv_block(x, 64)
-    x = conv_block(x, 128)
-    x = conv_block(x, 256)
 
     x = layers.GlobalAveragePooling2D()(x)
-    x = layers.BatchNormalization()(x)
+    
     x = layers.Dense(512, activation='relu', kernel_regularizer=regularizers.l2(0.001))(x)
+    x = layers.BatchNormalization()(x)
     x = layers.Dropout(0.3)(x)
 
     outputs = layers.Dense(num_classes, activation='softmax')(x)
