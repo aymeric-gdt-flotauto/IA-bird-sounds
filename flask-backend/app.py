@@ -9,6 +9,11 @@ app = Flask(__name__)
 CORS(app)
 
 app.static_folder = 'static'
+
+# Créer les dossiers nécessaires s'ils n'existent pas
+os.makedirs('uploads', exist_ok=True)
+os.makedirs(os.path.join('static', 'converted'), exist_ok=True)
+
 model = tf.keras.models.load_model('model/model_01.keras')
 labels = {'barswa' : 'Hirondelle rustique', 'comsan' : 'Chevalier guignette', 'eaywag1' : 'Bergeronnette printanière', 'thrnig1' : 'Rossignol progné', 'wlwwar' : 'Pouillot fitis', 'woosan': 'Chevalier sylvain'}  # adapte à ton modèle
 
