@@ -412,7 +412,7 @@ def supprimer_spectrograms():
     """
     Supprime tous les dossiers 'spectrograms' et 'audio_processed' dans les sous-dossiers de bird_audio
     """
-    base_dir = Path("dataset/bird_audio")
+    base_dir = Path("dataset2/dataset-2")
     
     # Vérifier si le répertoire existe
     if not base_dir.exists():
@@ -442,7 +442,7 @@ def supprimer_spectrograms():
 
 def main():
     # Chemin de base des données
-    base_dir = Path("dataset/bird_audio")
+    base_dir = Path("dataset2/dataset-2")
     
     # Vérifier si le répertoire existe
     if not base_dir.exists():
@@ -450,7 +450,7 @@ def main():
         return
     
     # Nombre d'augmentations à générer pour chaque fichier audio
-    num_augmentations = 5
+    num_augmentations = 2
     
     # Parcourir tous les sous-dossiers d'espèces d'oiseaux
     for bird_folder in base_dir.iterdir():

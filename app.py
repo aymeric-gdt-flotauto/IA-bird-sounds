@@ -7,17 +7,16 @@ import shutil
 
 # config var to models archi
 epochs=30
-target_size=(969,370)
+target_size=(388,148)
 batch_size=32
-base_dir=r'C:\Users\FabienETHEVE\OneDrive - ARTIMON\Bureau\bird\IA-bird-sounds\dataset\bird_audio'
-train_dir=r'C:\Users\FabienETHEVE\OneDrive - ARTIMON\Bureau\bird\IA-bird-sounds\dataset\train_data'
+base_dir=r'C:\Users\FabienETHEVE\OneDrive - ARTIMON\Bureau\bird\IA-bird-sounds\dataset2\dataset-2'
+train_dir=r'C:\Users\FabienETHEVE\OneDrive - ARTIMON\Bureau\bird\IA-bird-sounds\dataset2\train_data'
 seed=42
 
 os.makedirs(train_dir, exist_ok=True)
 
-# Parcours chaque classe (ex: abethr1, bagwea1, etc.)
 # for bird_class in os.listdir(base_dir):
-#     class_path = os.path.join(base_dir, bird_class, "spectrograms", "raw_clean")
+#     class_path = os.path.join(base_dir, bird_class, "spectrograms", "mel_model")
 #     if os.path.exists(class_path):
 #         target_class_dir = os.path.join(train_dir, bird_class)
 #         os.makedirs(target_class_dir, exist_ok=True)
@@ -34,7 +33,13 @@ os.makedirs(train_dir, exist_ok=True)
 train_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
     rescale=1./255,
     validation_split=0.2,
+    rotation_range=15,
+    zoom_range=0.1,
+    width_shift_range=0.1,
+    height_shift_range=0.1,
+    horizontal_flip=True
 )
+
 
 
 
@@ -72,7 +77,7 @@ early_stopping = tf.keras.callbacks.EarlyStopping(
     patience=5,
     restore_best_weights=True
 )
-inputs = tf.keras.layers.Input(shape=(969, 370, 3))
+inputs = tf.keras.layers.Input(shape=(388, 148, 3))
 model = build_models(num_classes,inputs)
 model.summary()
 history = model.fit(
@@ -105,4 +110,4 @@ plt.tight_layout()
 plt.savefig(r'C:\Users\FabienETHEVE\OneDrive - ARTIMON\Bureau\bird\IA-bird-sounds\historique\training_history.png')
 plt.show()
 
-model.save('model_01.keras')
+model.save('model_02.keras')
