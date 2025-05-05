@@ -8,6 +8,7 @@ import tensorflow as tf
 app = Flask(__name__)
 CORS(app)
 
+app.static_folder = 'static'
 model = tf.keras.models.load_model('model/model_01.keras')
 labels = {'barswa' : 'Hirondelle rustique', 'comsan' : 'Chevalier guignette', 'eaywag1' : 'Bergeronnette printanière', 'thrnig1' : 'Rossignol progné', 'wlwwar' : 'Pouillot fitis', 'woosan': 'Chevalier sylvain'}  # adapte à ton modèle
 
@@ -21,13 +22,24 @@ def predict():
     ogg_path = convert_to_ogg(path)
     features = preprocess_audio(ogg_path)
 
-    prediction = model.predict(features)
-    
-    # Supposons que la sortie est un vecteur de probabilités
-    predicted_index = prediction.argmax(axis=1)[0]
+    prediction = model.predict(features)[0]  # shape: (num_classes,)
     
     class_ids = list(labels.keys())  # ['barswa', 'comsan', ...]
-    predicted_class_id = class_ids[predicted_index]
-    predicted_bird = labels[predicted_class_id]
+    top_indices = prediction.argsort()[-5:][::-1]  # indices des 5 plus grandes valeurs
 
-    return jsonify({'bird': predicted_bird})
+    top_predictions = []
+    for idx in top_indices:
+        class_id = class_ids[idx]
+        top_predictions.append({
+            'id': class_id,
+            'label': labels[class_id],
+            'confidence': float(prediction[idx])
+        })
+
+    spectrogram_filename = f"{os.path.splitext(filename)[0]}_spectrogram.jpg"
+    spectrogram_url = f"http://localhost:5000/static/converted/{spectrogram_filename}"
+
+    return jsonify({
+        'top_predictions': top_predictions,
+        'spectrogram_url': spectrogram_url
+    })

@@ -10,7 +10,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.
 from create_spectrograms import create_mel_spectrogram_for_model
 
 UPLOAD_FOLDER = "uploads"
-CONVERTED_FOLDER = "converted"
+CONVERTED_FOLDER = "static/converted"
 TARGET_SAMPLE_RATE = 32000  # 32 kHz
 
 os.makedirs(CONVERTED_FOLDER, exist_ok=True)
