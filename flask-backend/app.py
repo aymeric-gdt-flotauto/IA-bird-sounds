@@ -8,7 +8,8 @@ import tensorflow as tf
 app = Flask(__name__)
 CORS(app)
 
-model = tf.keras.models.load_model('model/bird_model.keras')
+model = tf.keras.models.load_model('model/model_01.keras')
+labels = {'barswa' : 'Hirondelle rustique', 'comsan' : 'Chevalier guignette', 'eaywag1' : 'Bergeronnette printanière', 'thrnig1' : 'Rossignol progné', 'wlwwar' : 'Pouillot fitis', 'woosan': 'Chevalier sylvain'}  # adapte à ton modèle
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -18,11 +19,15 @@ def predict():
     file.save(path)
 
     ogg_path = convert_to_ogg(path)
-    features = preprocess_audio(ogg_path)  # à adapter à ton modèle
+    features = preprocess_audio(ogg_path)
+
     prediction = model.predict(features)
-    predicted_bird = ...  # à extraire selon ta sortie
+    
+    # Supposons que la sortie est un vecteur de probabilités
+    predicted_index = prediction.argmax(axis=1)[0]
+    
+    class_ids = list(labels.keys())  # ['barswa', 'comsan', ...]
+    predicted_class_id = class_ids[predicted_index]
+    predicted_bird = labels[predicted_class_id]
 
     return jsonify({'bird': predicted_bird})
-
-if __name__ == '__main__':
-    app.run(debug=True)
